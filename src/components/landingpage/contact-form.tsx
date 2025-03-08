@@ -18,6 +18,7 @@ export default function ContactForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -26,29 +27,44 @@ export default function ContactForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError("");
 
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      setFormData({
-        fullName: "",
-        email: "",
-        phone: "",
-        company: "",
-        message: "",
+    try {
+      const response = await fetch("https://formspree.io/f/xpwpabza", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
       });
 
-      // Reset success message after 5 seconds
-      setTimeout(() => setIsSubmitted(false), 5000);
-    }, 1500);
+      if (response.ok) {
+        setIsSubmitted(true);
+        setFormData({
+          fullName: "",
+          email: "",
+          phone: "",
+          company: "",
+          message: "",
+        });
+      } else {
+        throw new Error("Failed to submit the form");
+      }
+    } catch (err) {
+      setError(
+        "An error occurred while sending your message. Please try again."
+      );
+      console.error(err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <section className="py-24">
+    <section className="py-24 bg-black/30 backdrop-blur-sm">
       <div className="container mx-auto px-4 max-w-3xl">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Contact CarbonPay</h2>
@@ -70,8 +86,16 @@ export default function ContactForm() {
         ) : (
           <form
             onSubmit={handleSubmit}
+            method="POST"
+            action="https://formspree.io/f/xpwpabza"
             className="bg-black/40 border border-white/10 rounded-xl p-8 shadow-xl"
           >
+            {error && (
+              <div className="mb-6 bg-red-900/30 border border-red-500/30 rounded-lg p-4 text-red-200">
+                {error}
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
                 <label

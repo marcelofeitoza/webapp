@@ -1,42 +1,56 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react"
-import { Check, Shield, Coins, Repeat, Trash2 } from "lucide-react"
+import { useEffect, useRef, useState } from "react";
+import { Check, Shield, Coins, Repeat, Trash2 } from "lucide-react";
 
 export default function TokenizationProcess() {
-  const [activeStep, setActiveStep] = useState(0)
-  const [isVisible, setIsVisible] = useState(false)
-  const sectionRef = useRef<HTMLDivElement>(null)
+  const [activeStep, setActiveStep] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const [blockHashes, setBlockHashes] = useState<string[]>([]);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  // Generate block hashes on client-side only
+  useEffect(() => {
+    const hashes = Array.from({ length: 10 }).map(() => {
+      return (
+        "0x" +
+        Array.from({ length: 16 })
+          .map(() => Math.floor(Math.random() * 16).toString(16))
+          .join("")
+      );
+    });
+    setBlockHashes(hashes);
+  }, []);
 
   // Auto-advance steps
   useEffect(() => {
-    if (!isVisible) return
+    if (!isVisible) return;
 
     const interval = setInterval(() => {
-      setActiveStep((prev) => (prev + 1) % 4)
-    }, 4000)
+      setActiveStep((prev) => (prev + 1) % 4);
+    }, 1000);
 
-    return () => clearInterval(interval)
-  }, [isVisible])
+    return () => clearInterval(interval);
+  }, [isVisible]);
 
   // Intersection observer to trigger animations when section is visible
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true)
-          observer.disconnect()
+          setIsVisible(true);
+          observer.disconnect();
         }
       },
-      { threshold: 0.2 },
-    )
+      { threshold: 0.2 }
+    );
 
     if (sectionRef.current) {
-      observer.observe(sectionRef.current)
+      observer.observe(sectionRef.current);
     }
 
-    return () => observer.disconnect()
-  }, [])
+    return () => observer.disconnect();
+  }, []);
 
   const steps = [
     {
@@ -63,42 +77,50 @@ export default function TokenizationProcess() {
         "Once used to offset emissions, tokens are permanently burned on-chain, providing cryptographic proof of environmental impact.",
       icon: <Trash2 className="h-8 w-8" />,
     },
-  ]
+  ];
 
   const benefits = [
     {
       title: "Ultra-Low Fees",
-      description: "Transactions cost a fraction of a cent, making microtransactions and frequent trading viable.",
+      description:
+        "Transactions cost a fraction of a cent, making microtransactions and frequent trading viable.",
     },
     {
       title: "High Throughput & Speed",
-      description: "Solana processes thousands of transactions per second with near-instant finality.",
+      description:
+        "Solana processes thousands of transactions per second with near-instant finality.",
     },
     {
       title: "Transparency & Security",
-      description: "All transactions are recorded immutably, eliminating double spending and fraud risks.",
+      description:
+        "All transactions are recorded immutably, eliminating double spending and fraud risks.",
     },
     {
       title: "Global Accessibility",
       description:
         "Enterprises and individuals can access and trade carbon credits from anywhere without intermediaries.",
     },
-  ]
+  ];
 
   return (
     <section ref={sectionRef} className="py-24">
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-6">Tokenization of Carbon Credits</h2>
+          <h2 className="text-4xl font-bold mb-6">
+            Tokenization of Carbon Credits
+          </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            CarbonPay leverages blockchain technology to tokenize verified carbon credits, transforming them into
-            digital assets that can be securely traded, tracked, and retired in real-time on Solana.
+            CarbonPay leverages blockchain technology to tokenize verified
+            carbon credits, transforming them into digital assets that can be
+            securely traded, tracked, and retired in real-time on Solana.
           </p>
         </div>
 
         {/* Tokenization Process Visualization */}
         <div className="mb-20">
-          <h3 className="text-2xl font-semibold mb-8 text-center">Tokenization Process</h3>
+          <h3 className="text-2xl font-semibold mb-8 text-center">
+            Tokenization Process
+          </h3>
 
           <div className="relative">
             {/* Process Steps */}
@@ -121,7 +143,9 @@ export default function TokenizationProcess() {
                     {activeStep === index ? (
                       <span className="text-white font-bold">{index + 1}</span>
                     ) : (
-                      <span className="text-gray-400 font-bold">{index + 1}</span>
+                      <span className="text-gray-400 font-bold">
+                        {index + 1}
+                      </span>
                     )}
                   </div>
 
@@ -157,11 +181,17 @@ export default function TokenizationProcess() {
 
         {/* Why Solana Section */}
         <div>
-          <h3 className="text-2xl font-semibold mb-8 text-center">Why Tokenize on Solana?</h3>
+          <h3 className="text-2xl font-semibold mb-8 text-center">
+            Why Tokenize on Solana?
+          </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div
-              className={`transition-all duration-1000 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}`}
+              className={`transition-all duration-1000 ${
+                isVisible
+                  ? "opacity-100 translate-x-0"
+                  : "opacity-0 -translate-x-12"
+              }`}
             >
               <div className="space-y-6">
                 {benefits.map((benefit, index) => (
@@ -170,7 +200,9 @@ export default function TokenizationProcess() {
                       <Check className="h-5 w-5 text-green-500" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-lg mb-1">{benefit.title}</h4>
+                      <h4 className="font-semibold text-lg mb-1">
+                        {benefit.title}
+                      </h4>
                       <p className="text-gray-400">{benefit.description}</p>
                     </div>
                   </div>
@@ -179,7 +211,11 @@ export default function TokenizationProcess() {
             </div>
 
             <div
-              className={`transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"}`}
+              className={`transition-all duration-1000 delay-300 ${
+                isVisible
+                  ? "opacity-100 translate-x-0"
+                  : "opacity-0 translate-x-12"
+              }`}
             >
               {/* Solana Blockchain Visualization */}
               <div className="bg-black/40 border border-white/10 rounded-xl p-6 h-full">
@@ -194,36 +230,74 @@ export default function TokenizationProcess() {
                 <div className="relative h-[300px] overflow-hidden">
                   {/* Animated blockchain blocks */}
                   <div className="absolute inset-0">
-                    {Array.from({ length: 10 }).map((_, i) => (
-                      <div
-                        key={i}
-                        className="absolute bg-black/60 border border-green-500/30 rounded-md p-3 w-[180px] shadow-lg"
-                        style={{
-                          top: `${30 + i * 25}px`,
-                          left: `${50 + i * 15}px`,
-                          transform: `rotate(${i % 2 === 0 ? -2 : 2}deg)`,
-                          zIndex: 10 - i,
-                          opacity: 1 - i * 0.08,
-                        }}
-                      >
-                        <div className="flex justify-between items-center mb-2">
-                          <div className="text-xs text-gray-400">Block #{(9999999 - i).toLocaleString()}</div>
-                          <div className="text-xs text-green-500">{(0.4 + i * 0.1).toFixed(1)}s</div>
-                        </div>
-                        <div className="flex gap-2 mb-2">
-                          {Array.from({ length: 3 }).map((_, j) => (
-                            <div key={j} className="h-1 flex-1 rounded-full bg-green-500/30"></div>
-                          ))}
-                        </div>
-                        <div className="text-xs text-gray-500 truncate">
-                          0x
-                          {Array.from({ length: 16 })
-                            .map(() => Math.floor(Math.random() * 16).toString(16))
-                            .join("")}
-                          ...
-                        </div>
-                      </div>
-                    ))}
+                    {blockHashes.length > 0
+                      ? Array.from({ length: 10 }).map((_, i) => (
+                          <div
+                            key={i}
+                            className="absolute bg-black/60 border border-green-500/30 rounded-md p-3 w-[180px] shadow-lg"
+                            style={{
+                              top: `${30 + i * 25}px`,
+                              left: `${50 + i * 15}px`,
+                              transform: `rotate(${i % 2 === 0 ? -2 : 2}deg)`,
+                              zIndex: 10 - i,
+                              opacity: 1 - i * 0.08,
+                            }}
+                          >
+                            <div className="flex justify-between items-center mb-2">
+                              <div className="text-xs text-gray-400">
+                                Block #{(9999999 - i).toLocaleString()}
+                              </div>
+                              <div className="text-xs text-green-500">
+                                {(0.4 + i * 0.1).toFixed(1)}s
+                              </div>
+                            </div>
+                            <div className="flex gap-2 mb-2">
+                              {Array.from({ length: 3 }).map((_, j) => (
+                                <div
+                                  key={j}
+                                  className="h-1 flex-1 rounded-full bg-green-500/30"
+                                ></div>
+                              ))}
+                            </div>
+                            <div className="text-xs text-gray-500 truncate">
+                              {blockHashes[i] || "0x..."}...
+                            </div>
+                          </div>
+                        ))
+                      : // Placeholder content while client-side rendering happens
+                        Array.from({ length: 10 }).map((_, i) => (
+                          <div
+                            key={i}
+                            className="absolute bg-black/60 border border-green-500/30 rounded-md p-3 w-[180px] shadow-lg"
+                            style={{
+                              top: `${30 + i * 25}px`,
+                              left: `${50 + i * 15}px`,
+                              transform: `rotate(${i % 2 === 0 ? -2 : 2}deg)`,
+                              zIndex: 10 - i,
+                              opacity: 1 - i * 0.08,
+                            }}
+                          >
+                            <div className="flex justify-between items-center mb-2">
+                              <div className="text-xs text-gray-400">
+                                Block #{(9999999 - i).toLocaleString()}
+                              </div>
+                              <div className="text-xs text-green-500">
+                                {(0.4 + i * 0.1).toFixed(1)}s
+                              </div>
+                            </div>
+                            <div className="flex gap-2 mb-2">
+                              {Array.from({ length: 3 }).map((_, j) => (
+                                <div
+                                  key={j}
+                                  className="h-1 flex-1 rounded-full bg-green-500/30"
+                                ></div>
+                              ))}
+                            </div>
+                            <div className="text-xs text-gray-500 truncate">
+                              0x...
+                            </div>
+                          </div>
+                        ))}
                   </div>
 
                   {/* Stats overlay */}
@@ -250,8 +324,9 @@ export default function TokenizationProcess() {
                 </div>
 
                 <div className="mt-6 text-center text-sm text-gray-400">
-                  By bringing carbon markets on-chain, CarbonPay eliminates inefficiencies, enhances credibility, and
-                  unlocks new possibilities for sustainable finance at a global scale.
+                  By bringing carbon markets on-chain, CarbonPay eliminates
+                  inefficiencies, enhances credibility, and unlocks new
+                  possibilities for sustainable finance at a global scale.
                 </div>
               </div>
             </div>
@@ -259,6 +334,5 @@ export default function TokenizationProcess() {
         </div>
       </div>
     </section>
-  )
+  );
 }
-

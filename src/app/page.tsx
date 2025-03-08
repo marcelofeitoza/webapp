@@ -7,6 +7,7 @@ import ImageGrid from "@/components/landingpage/image-grid";
 import ContactForm from "@/components/landingpage/contact-form";
 import OnDemandOffset from "@/components/landingpage/on-demand-offset";
 import TokenizationProcess from "@/components/landingpage/tokenization-process";
+import CarbonCreditsExplainer from "@/components/landingpage/carbon-credit-explainer";
 export default function Home() {
   return (
     <div className="relative min-h-screen bg-black overflow-hidden">
@@ -26,6 +27,7 @@ export default function Home() {
         <Hero />
         {/* <ImageGrid /> */}
         <Features />
+        <CarbonCreditsExplainer />
         <TokenizationProcess />
         <OnDemandOffset />
         <CTA />

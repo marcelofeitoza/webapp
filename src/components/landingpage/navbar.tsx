@@ -29,7 +29,7 @@ export default function Navbar() {
               <span className="sr-only">GitHub</span>
             </Button>
           </Link> */}
-          <Button variant="ghost" size="sm">
+          {/* <Button variant="ghost" size="sm">
             Contact
           </Button>
           <Button variant="ghost" size="sm">
@@ -37,7 +37,7 @@ export default function Navbar() {
           </Button>
           <Button variant="ghost" size="sm">
             Contact
-          </Button>
+          </Button> */}
           <Button size="sm">Beta Avaiable Soon</Button>
         </div>
       </div>

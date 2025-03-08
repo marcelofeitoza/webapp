@@ -13,12 +13,13 @@ export default function Hero() {
           <span className="font-bold">Carbon</span> Solutions.
         </h1>
         <p className="mx-auto max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-          Seamless, secure, and transparent carbon credit trading powered by blockchain.
+          Seamless, secure, and transparent carbon credit trading powered by
+          blockchain.
         </p>
       </div>
       <div className="flex gap-4">
         <Button size="lg" variant="outline">
-          OFFSET YOUR EMISSIONS
+          BETA AVAIABLE SOON
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>
