@@ -2,6 +2,9 @@
   "name": "template-next-tailwind-basic",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "yarn": ">=1.22.19"
+  },
   "scripts": {
     "anchor": "cd anchor && anchor",
     "anchor-build": "cd anchor && anchor build",
